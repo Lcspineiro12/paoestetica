@@ -1,52 +1,49 @@
-let gastos = [];
-let conceptos = [];
-let seguir = true;
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formulario");
+    const lista = document.getElementById("lista-gastos");
+    const totalSpan = document.getElementById("total");
 
-function ingresarDatos() {
-    while (seguir) {
-        let gasto = prompt("Ingresá un gasto:");
-        let concepto = prompt("Ingresa el concepto del gasto ingresado:");
-        if (concepto && gasto) {
-            gastos.push(gasto);
-            conceptos.push(concepto);
+    let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
+
+    function actualizarVista() {
+        lista.innerHTML = "";
+        let total = 0;
+
+        gastos.forEach((item, index) => {
+            const li = document.createElement("li");
+            li.textContent = `$${item.monto} en concepto de ${item.concepto}`;
+
+            const botonEliminar = document.createElement("button");
+            botonEliminar.textContent = "🗑️";
+            botonEliminar.classList.add("eliminar-btn");
+            botonEliminar.onclick = () => {
+                gastos.splice(index, 1);
+                localStorage.setItem("gastos", JSON.stringify(gastos));
+                actualizarVista();
+            };
+
+            li.appendChild(botonEliminar);
+            lista.appendChild(li);
+            total += parseFloat(item.monto);
+        });
+
+        totalSpan.textContent = `$${total.toFixed(2)}`;
+        localStorage.setItem("gastos", JSON.stringify(gastos));
+    }
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const concepto = document.getElementById("concepto").value.trim();
+        const monto = parseFloat(document.getElementById("monto").value);
+
+        if (concepto && !isNaN(monto)) {
+            gastos.push({ concepto, monto });
+            form.reset();
+            actualizarVista();
         } else {
-            alert("No ingresaste nada.");
+            alert("Por favor completá ambos campos correctamente.");
         }
+    });
 
-        seguir = confirm("¿Querés agregar otro?");
-    }
-}
-
-function calcularListaDeGastos() {
-    let mensaje = "Lista de gastos ingresados:\n";
-    for (let i = 0; i < gastos.length; i++) {
-        mensaje += `$${gastos[i]} en concepto de ${conceptos[i]}\n`;
-    }
-    return mensaje;
-}
-
-function calcularTotalDeGastos() {
-    let totalGastos = 0;
-    for (let i = 0; i < gastos.length; i++) {
-        let monto = parseFloat(gastos[i]);
-        if (!isNaN(monto)) {
-            totalGastos += monto;
-        }
-    }
-    return totalGastos;
-}
-
-function mensajeFinal () {
-    ingresarDatos();
-    let mensaje = calcularListaDeGastos();
-    let totalGastos = calcularTotalDeGastos();
-    let total = `El total de los gastos ingresados es de: $${totalGastos}`;
-    alert(`${mensaje}\n${total}`);
-}
-
-mensajeFinal();
-
-
-
-
-
+    actualizarVista();
+});

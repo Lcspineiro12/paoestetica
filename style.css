@@ -1,4 +1,50 @@
 body {
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    margin: 2rem;
+    background-color: #f5f5f5;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 300px;
+    margin-bottom: 1rem;
+}
+
+input, button {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    padding-left: 1rem;
+}
+
+.eliminar-btn {
+    margin-left: 1rem;
+    background-color: transparent;
+    border: none;
+    color: red;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.eliminar-btn:hover {
+    color: darkred;
 }

@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora</title>
+    <title>Calculadora de Gastos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Calculadora de gastos diarios.</h1>
+    <h1>Calculadora de gastos diarios</h1>
+
+    <form id="formulario">
+        <input type="text" id="concepto" placeholder="Concepto del gasto" required>
+        <input type="number" id="monto" placeholder="Monto $" required step="0.01">
+        <button type="submit">Agregar gasto</button>
+    </form>
+
+    <h2>Gastos ingresados:</h2>
+    <ul id="lista-gastos"></ul>
+
+    <h3>Total: <span id="total">$0.00</span></h3>
+
     <script src="main.js"></script>
 </body>
 
