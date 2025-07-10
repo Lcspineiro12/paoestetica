@@ -1,4 +1,1 @@
-# simuladorGastosDiarios
-# paoestetica
-# paoestetica
 # paoestetica
