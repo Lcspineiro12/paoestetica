@@ -3,7 +3,7 @@ let total = 0;
 
 function agregarAlCarrito(producto, precio) {
   carrito.push({ producto, precio });
-  total += precio;
+  total += precio; 
   actualizarCarrito();
 }
 
