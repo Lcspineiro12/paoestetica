@@ -26,10 +26,47 @@ body::before {
 
 /* Encabezado */
 header {
-  background-color: #f5d9e4;
+  background: #ffffff;
+  background: radial-gradient(circle,rgba(255, 255, 255, 1) 42%, rgba(230, 188, 188, 1) 62%, rgba(212, 150, 150, 1) 100%);
   text-align: center;
   padding: 20px;
   box-shadow: 0 2px 5px #ccc;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Goteo rosa cayendo */
+.goteo-header {
+  position: absolute;
+  top: -120px;
+  left: 0;
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  opacity: 0.95;
+  filter: brightness(1.1) contrast(1.1) saturate(1.2);
+  box-shadow: 0 8px 20px rgba(255, 192, 203, 0.3);
+  z-index: 1; /* menor */
+  animation: caerGoteo 1.5s ease-out forwards;
+}
+
+.banner-header {
+  position: relative;
+  width: 100%;
+  height: auto;
+  z-index: 2; /* mayor */
+}
+
+@keyframes caerGoteo {
+  from {
+    top: -120px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 0.95;
+  }
 }
 
 h1 {
@@ -135,7 +172,6 @@ h1 {
 }
 
 /* Redes */
-
 .social-container {
   display: flex;
   gap: 20px;
@@ -144,18 +180,19 @@ h1 {
 }
 
 .social-icon {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background-color: #f0f0f0;
   border-radius: 50%;
   color: white;
-  font-size: 28px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 .social-icon.whatsapp {
   background-color: #25d366;
