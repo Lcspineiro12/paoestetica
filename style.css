@@ -1,4 +1,8 @@
-/* ------------------ Fondo ------------------ */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
@@ -15,22 +19,17 @@ body {
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(255, 255, 255, 0.85);
   z-index: -1;
 }
 
-/* ------------------ Encabezado ------------------ */
 header {
   background: radial-gradient(circle, rgba(255, 255, 255, 1) 42%, rgba(230, 188, 188, 1) 62%, rgba(212, 150, 150, 1) 100%);
   text-align: center;
   padding: 20px;
   box-shadow: 0 2px 5px #ccc;
   position: relative;
-  overflow: hidden;
   z-index: 2;
 }
 
@@ -38,7 +37,12 @@ h1 {
   margin: 0;
 }
 
-/* ------------------ Productos ------------------ */
+p {
+  font-size: 30px;
+  color: #d1225b;
+  font-weight: bold;
+}
+
 .productos {
   display: flex;
   justify-content: center;
@@ -57,7 +61,6 @@ h1 {
   max-width: 300px;
   text-align: center;
   transition: transform 0.2s ease;
-  box-sizing: border-box;
 }
 
 .producto:hover {
@@ -70,7 +73,6 @@ h1 {
   border-radius: 8px;
 }
 
-/* ------------------ Botones de medidas ------------------ */
 .medidas {
   display: flex;
   justify-content: center;
@@ -101,7 +103,6 @@ h1 {
   transform: scale(1.08);
 }
 
-/* ------------------ Botón agregar ------------------ */
 .btn-agregar {
   background-color: #ff85a2;
   color: white;
@@ -117,7 +118,6 @@ h1 {
   background-color: #e46a8d;
 }
 
-/* ------------------ Carrito ------------------ */
 .carrito {
   position: fixed;
   top: 0;
@@ -147,7 +147,6 @@ main.con-carrito-abierto .productos {
   padding: 0;
 }
 
-/* ------------------ Botón quitar ------------------ */
 .btn-quitar {
   background-color: #ff6b6b;
   color: white;
@@ -163,7 +162,6 @@ main.con-carrito-abierto .productos {
   background-color: #e04848;
 }
 
-/* ------------------ Botón cerrar carrito ------------------ */
 .btn-cerrar {
   position: absolute;
   top: 10px;
@@ -179,7 +177,6 @@ main.con-carrito-abierto .productos {
   transform: scale(1.2);
 }
 
-/* ------------------ Botón WhatsApp ------------------ */
 .btn-whatsapp {
   background-color: #25d366;
   color: #fff;
@@ -196,7 +193,6 @@ main.con-carrito-abierto .productos {
   background-color: #1ebd5a;
 }
 
-/* ------------------ Redes sociales ------------------ */
 .social-container {
   display: flex;
   gap: 20px;
@@ -231,18 +227,9 @@ main.con-carrito-abierto .productos {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ------------------ Responsive: Tablets ------------------ */
 @media (max-width: 768px) {
   .producto {
     max-width: 100%;
-  }
-
-  .carrito {
-    width: 100%;
-  }
-
-  main.con-carrito-abierto .productos {
-    margin-right: 0;
   }
 
   .medida-btn {
@@ -260,9 +247,31 @@ main.con-carrito-abierto .productos {
     flex-direction: row;
     gap: 12px;
   }
+
+  .carrito {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: 2px solid #e46a8d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: top 0.3s ease;
+  }
+
+  .carrito.visible {
+    right: auto;
+    top: 0;
+  }
+
+  main.con-carrito-abierto .productos {
+    margin-right: 0;
+    margin-top: 60vh;
+  }
 }
 
-/* ------------------ Responsive: Celulares ------------------ */
 @media (max-width: 480px) {
   header h2 {
     font-size: 16px;
@@ -272,5 +281,14 @@ main.con-carrito-abierto .productos {
   .btn-whatsapp {
     font-size: 14px;
     padding: 10px;
+  }
+
+  .carrito {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .btn-quitar {
+    font-size: 11px;
   }
 }
