@@ -274,14 +274,18 @@ main.con-carrito-abierto .productos {
 }
 
 /* ------------------ Responsive: Celulares ------------------ */
-@media (max-width: 480px) {
-  header h2 {
-    font-size: 16px;
-    padding: 0 10px;
+@media (max-width: 768px) {
+  /* Productos más chicos */
+  .producto {
+    max-width: 220px; /* más pequeño que el original 300px */
+    width: 100%;
   }
 
-  .btn-whatsapp {
-    font-size: 14px;
-    padding: 10px;
+  /* Botones de medidas más grandes */
+  .medida-btn {
+    width: 50px;  /* antes 36px */
+    height: 50px; /* antes 36px */
+    font-size: 16px; /* antes 11px */
   }
 }
+
