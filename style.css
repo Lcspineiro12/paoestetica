@@ -242,7 +242,7 @@ main.con-carrito-abierto .productos {
 }
 
 /* ------------------ Responsive: Celulares ------------------ */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .carrito {
     position: fixed;
     bottom: 0;
