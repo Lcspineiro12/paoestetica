@@ -242,33 +242,32 @@ main.con-carrito-abierto .productos {
 }
 
 /* ------------------ Responsive: Celulares ------------------ */
-@media (max-width: 700px) {
+@media (max-width: 480px) {
   .carrito {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-    width: 90%;           /* no 100%, para que quede margen a los lados */
-    max-width: 350px;     /* ancho máximo */
-    height: 180px;        /* o menos si querés */
+    left: 0;
+    right: 0;
     top: auto;
+    width: 100%;
+    max-height: 40vh; /* límite para evitar que tape todo */
     border-left: none;
     border-top: 2px solid #e46a8d;
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.15);
     background: #fff0f5;
     padding: 15px 20px;
-    overflow-y: auto;
+    overflow: visible; /* elimina el scroll */
     transition: transform 0.3s ease;
+    transform: translateY(100%); /* oculto inicialmente */
   }
 
   .carrito.visible {
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 
   main.con-carrito-abierto .productos {
-    margin-bottom: 200px; /* para que no tape productos */
+    margin-bottom: 220px;
     margin-right: 0;
-    margin-top: 0;
     transition: margin-bottom 0.3s ease;
   }
 }
