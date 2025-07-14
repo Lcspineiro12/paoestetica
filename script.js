@@ -2,15 +2,110 @@ let carrito = [];
 let total = 0;
 const stockDisponible = {};
 
-// Cargar stock desde archivo externo
-fetch('stock.json')
-  .then(res => res.json())
-  .then(data => {
-    Object.assign(stockDisponible, data);
-  })
-  .catch(err => {
-    console.error("Error al cargar el stock:", err);
+document.addEventListener('DOMContentLoaded', () => {
+  // Primero cargo el stock desde el JSON
+  fetch('stock.json')
+    .then(res => res.json())
+    .then(data => {
+      Object.assign(stockDisponible, data);
+      inicializarProductos();
+    })
+    .catch(err => {
+      console.error("Error al cargar el stock:", err);
+      // Igual inicializo para evitar que la web quede rota
+      inicializarProductos();
+    });
+});
+
+function inicializarProductos() {
+  document.querySelectorAll('.producto').forEach(prod => {
+    const nombre = prod.dataset.nombre;
+    const precioElem = prod.querySelector('.precio');
+    const botones = prod.querySelectorAll('.medida-btn');
+
+    if (botones.length > 0) {
+      const primera = botones[0];
+      prod.dataset.medida = primera.dataset.medida;
+      prod.dataset.precio = primera.dataset.precio;
+      precioElem.textContent = `$${primera.dataset.precio}`;
+      primera.classList.add('selected');
+    }
+
+    botones.forEach(btn => {
+      btn.addEventListener('click', () => {
+        botones.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        prod.dataset.medida = btn.dataset.medida;
+        prod.dataset.precio = btn.dataset.precio;
+        precioElem.textContent = `$${btn.dataset.precio}`;
+
+        // Actualizar stock label cuando cambia la medida
+        const productoNombre = `${nombre} - ${btn.dataset.medida}`;
+        const stockLabel = prod.querySelector('.stock-label');
+        if (stockLabel) {
+          stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre] ?? 0}`;
+        }
+      });
+    });
+
+    const btnAgregar = prod.querySelector('.btn-agregar');
+
+    // Crear o actualizar etiqueta de stock
+    let stockLabel = prod.querySelector('.stock-label');
+    if (!stockLabel) {
+      stockLabel = document.createElement('p');
+      stockLabel.classList.add('stock-label');
+      prod.appendChild(stockLabel);
+    }
+    const medidaInicial = prod.dataset.medida;
+    const productoNombreInicial = `${nombre} - ${medidaInicial}`;
+    stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombreInicial] ?? 0}`;
+
+    btnAgregar.disabled = (stockDisponible[productoNombreInicial] ?? 0) <= 0;
+    btnAgregar.textContent = btnAgregar.disabled ? "NO HAY STOCK" : "Agregar al carrito";
+
+    btnAgregar.addEventListener('click', () => {
+      const medida = prod.dataset.medida;
+      const precio = parseFloat(prod.dataset.precio);
+      const productoNombre = `${nombre} - ${medida}`;
+
+      if (!(productoNombre in stockDisponible)) {
+        stockDisponible[productoNombre] = 0;
+      }
+
+      if (stockDisponible[productoNombre] <= 0) {
+        btnAgregar.disabled = true;
+        btnAgregar.textContent = "NO HAY STOCK";
+        stockLabel.textContent = `Stock disponible: 0`;
+        return;
+      }
+
+      agregarAlCarrito(productoNombre, precio);
+      stockDisponible[productoNombre]--;
+
+      stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre]}`;
+
+      if (stockDisponible[productoNombre] <= 0) {
+        btnAgregar.disabled = true;
+        btnAgregar.textContent = "NO HAY STOCK";
+      }
+    });
   });
+
+  // Botón cerrar carrito
+  const btnCerrar = document.getElementById('cerrar-carrito');
+  const carritoElemento = document.querySelector('.carrito');
+  const main = document.querySelector('main');
+
+  if (btnCerrar && carritoElemento && main) {
+    btnCerrar.addEventListener('click', () => {
+      carritoElemento.classList.remove("visible");
+      main.classList.remove("con-carrito-abierto");
+    });
+  } else {
+    console.warn('No se encontró el botón o el carrito para cerrar');
+  }
+}
 
 function agregarAlCarrito(producto, precio) {
   const existente = carrito.find(item => item.producto === producto);
@@ -46,7 +141,7 @@ function quitarDelCarrito(index) {
     stockDisponible[nombre] = 1;
   }
 
-  // Buscar el botón y actualizar stock visual
+  // Actualizar botón y stock visual
   document.querySelectorAll('.producto').forEach(prod => {
     const nombreProducto = prod.dataset.nombre;
     const medida = prod.dataset.medida;
@@ -108,84 +203,3 @@ function actualizarCarrito() {
     main.classList.remove("con-carrito-abierto");
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.producto').forEach(prod => {
-    const nombre = prod.dataset.nombre;
-    const precioElem = prod.querySelector('.precio');
-    const botones = prod.querySelectorAll('.medida-btn');
-
-    if (botones.length > 0) {
-      const primera = botones[0];
-      prod.dataset.medida = primera.dataset.medida;
-      prod.dataset.precio = primera.dataset.precio;
-      precioElem.textContent = `$${primera.dataset.precio}`;
-      primera.classList.add('selected');
-    }
-
-    botones.forEach(btn => {
-      btn.addEventListener('click', () => {
-        botones.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        prod.dataset.medida = btn.dataset.medida;
-        prod.dataset.precio = btn.dataset.precio;
-        precioElem.textContent = `$${btn.dataset.precio}`;
-      });
-    });
-
-    const btnAgregar = prod.querySelector('.btn-agregar');
-
-    // Crear etiqueta de stock
-    const stockLabel = document.createElement('p');
-    stockLabel.classList.add('stock-label');
-    const medida = prod.dataset.medida;
-    const productoNombre = `${nombre} - ${medida}`;
-
-    stockLabel.textContent = `Stock disponible: ${
-      stockDisponible[productoNombre] ?? 0
-    }`;
-    prod.appendChild(stockLabel);
-
-    btnAgregar.addEventListener('click', () => {
-      const medida = prod.dataset.medida;
-      const precio = parseFloat(prod.dataset.precio);
-      const productoNombre = `${nombre} - ${medida}`;
-
-      // Inicializar stock si no existe
-      if (!(productoNombre in stockDisponible)) {
-        stockDisponible[productoNombre] = 0;
-      }
-
-      if (stockDisponible[productoNombre] <= 0) {
-        btnAgregar.disabled = true;
-        btnAgregar.textContent = "NO HAY STOCK";
-        stockLabel.textContent = `Stock disponible: 0`;
-        return;
-      }
-
-      agregarAlCarrito(productoNombre, precio);
-      stockDisponible[productoNombre]--;
-
-      stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre]}`;
-
-      if (stockDisponible[productoNombre] <= 0) {
-        btnAgregar.disabled = true;
-        btnAgregar.textContent = "NO HAY STOCK";
-      }
-    });
-  });
-
-  // Botón cerrar carrito
-  const btnCerrar = document.getElementById('cerrar-carrito');
-  const carritoElemento = document.querySelector('.carrito');
-  const main = document.querySelector('main');
-
-  if (btnCerrar && carritoElemento && main) {
-    btnCerrar.addEventListener('click', () => {
-      carritoElemento.classList.remove("visible");
-      main.classList.remove("con-carrito-abierto");
-    });
-  } else {
-    console.warn('No se encontró el botón o el carrito para cerrar');
-  }
-});
