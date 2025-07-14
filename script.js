@@ -3,7 +3,6 @@ let total = 0;
 const stockDisponible = {};
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Primero cargo el stock desde el JSON
   fetch('stock.json')
     .then(res => res.json())
     .then(data => {
@@ -12,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => {
       console.error("Error al cargar el stock:", err);
-      // Igual inicializo para evitar que la web quede rota
       inicializarProductos();
     });
 });
@@ -39,7 +37,6 @@ function inicializarProductos() {
         prod.dataset.precio = btn.dataset.precio;
         precioElem.textContent = `$${btn.dataset.precio}`;
 
-        // Actualizar stock label cuando cambia la medida
         const productoNombre = `${nombre} - ${btn.dataset.medida}`;
         const stockLabel = prod.querySelector('.stock-label');
         if (stockLabel) {
@@ -50,7 +47,6 @@ function inicializarProductos() {
 
     const btnAgregar = prod.querySelector('.btn-agregar');
 
-    // Crear o actualizar etiqueta de stock
     let stockLabel = prod.querySelector('.stock-label');
     if (!stockLabel) {
       stockLabel = document.createElement('p');
@@ -92,7 +88,6 @@ function inicializarProductos() {
     });
   });
 
-  // Botón cerrar carrito
   const btnCerrar = document.getElementById('cerrar-carrito');
   const carritoElemento = document.querySelector('.carrito');
   const main = document.querySelector('main');
@@ -134,14 +129,12 @@ function quitarDelCarrito(index) {
   const item = carrito[index];
   const nombre = item.producto;
 
-  // Restaurar stock
   if (nombre in stockDisponible) {
     stockDisponible[nombre]++;
   } else {
     stockDisponible[nombre] = 1;
   }
 
-  // Actualizar botón y stock visual
   document.querySelectorAll('.producto').forEach(prod => {
     const nombreProducto = prod.dataset.nombre;
     const medida = prod.dataset.medida;
@@ -163,25 +156,25 @@ function quitarDelCarrito(index) {
 }
 
 function actualizarCarrito() {
-  const lista = document.getElementById('lista-carrito');
+  const carritoUl = document.querySelector('.carrito ul');
   const totalTexto = document.getElementById('total');
-  const btnWA = document.getElementById('btn-whatsapp');
+  const btnWA = document.querySelector('.btn-whatsapp');
   const carritoElemento = document.querySelector('.carrito');
   const main = document.querySelector('main');
 
-  lista.innerHTML = '';
+  carritoUl.innerHTML = '';
 
   carrito.forEach((item, index) => {
     const li = document.createElement('li');
     li.textContent = `${item.producto} x${item.cantidad} - $${item.precioTotal}`;
 
     const btnQuitar = document.createElement('button');
-    btnQuitar.textContent = '❌ Quitar';
-    btnQuitar.className = 'btn-quitar';
+    btnQuitar.textContent = 'Quitar';
+    btnQuitar.classList.add('btn-quitar');
     btnQuitar.onclick = () => quitarDelCarrito(index);
 
     li.appendChild(btnQuitar);
-    lista.appendChild(li);
+    carritoUl.appendChild(li);
   });
 
   totalTexto.textContent = `Total: $${total}`;
