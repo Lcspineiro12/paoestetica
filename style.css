@@ -44,7 +44,7 @@ h1 {
 }
 
 p {
-  font-size: 30px; 
+  font-size: 40px; 
   color: #d1225b; 
   font-weight: bold;
 }
@@ -250,7 +250,7 @@ main.con-carrito-abierto .productos {
     bottom: 0;
     left: 0;
     right: 0;
-    max-height: 50vh; /* altura máxima dinámica */
+    max-height: 30vh; /* altura máxima dinámica */
     height: auto; /* auto para crecer si hay pocos productos */
     width: 100%;
     top: auto;
@@ -276,9 +276,15 @@ main.con-carrito-abierto .productos {
     margin: 0;
     padding: 0;
     overflow-y: auto; /* solo la lista puede scrollear si es muy larga */
-    max-height: 40vh; /* altura máxima para la lista */
+    max-height: 30vh; /* altura máxima para la lista */
     flex-grow: 1; /* para que tome todo el espacio disponible */
   }
+
+  p {
+  font-size: 30px; 
+  color: #d1225b; 
+  font-weight: bold;
+}
 
   main.con-carrito-abierto .productos {
     margin-bottom: 65vh; /* espacio para el carrito máximo */
