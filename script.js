@@ -2,18 +2,25 @@ let carrito = [];
 let total = 0;
 const stockDisponible = {};
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('stock.json')
-    .then(res => res.json())
-    .then(data => {
-      Object.assign(stockDisponible, data);
-      inicializarProductos();
-    })
-    .catch(err => {
-      console.error("Error al cargar el stock:", err);
-      inicializarProductos();
-    });
-});
+// Elementos globales
+const btnAbrirCarrito = document.getElementById('abrir-carrito');
+const btnCerrar = document.getElementById('cerrar-carrito');
+const carritoElemento = document.querySelector('.carrito');
+const main = document.querySelector('main');
+const totalTexto = document.getElementById('total');
+const btnWA = document.getElementById('btn-whatsapp');
+
+// Cargar stock desde JSON
+fetch('stock.json')
+  .then(res => res.json())
+  .then(data => {
+    Object.assign(stockDisponible, data);
+    inicializarProductos();
+  })
+  .catch(err => {
+    console.error("Error al cargar el stock:", err);
+    inicializarProductos();
+  });
 
 function inicializarProductos() {
   document.querySelectorAll('.producto').forEach(prod => {
@@ -88,17 +95,18 @@ function inicializarProductos() {
     });
   });
 
-  const btnCerrar = document.getElementById('cerrar-carrito');
-  const carritoElemento = document.querySelector('.carrito');
-  const main = document.querySelector('main');
-
-  if (btnCerrar && carritoElemento && main) {
+  if (btnCerrar) {
     btnCerrar.addEventListener('click', () => {
       carritoElemento.classList.remove("visible");
       main.classList.remove("con-carrito-abierto");
     });
-  } else {
-    console.warn('No se encontró el botón o el carrito para cerrar');
+  }
+
+  if (btnAbrirCarrito) {
+    btnAbrirCarrito.addEventListener('click', () => {
+      carritoElemento.classList.add("visible");
+      main.classList.add("con-carrito-abierto");
+    });
   }
 }
 
@@ -157,11 +165,6 @@ function quitarDelCarrito(index) {
 
 function actualizarCarrito() {
   const carritoUl = document.querySelector('.carrito ul');
-  const totalTexto = document.getElementById('total');
-  const btnWA = document.querySelector('.btn-whatsapp');
-  const carritoElemento = document.querySelector('.carrito');
-  const main = document.querySelector('main');
-
   carritoUl.innerHTML = '';
 
   carrito.forEach((item, index) => {
@@ -176,6 +179,9 @@ function actualizarCarrito() {
     li.appendChild(btnQuitar);
     carritoUl.appendChild(li);
   });
+
+  // Scroll desde abajo
+  carritoUl.scrollTop = carritoUl.scrollHeight;
 
   totalTexto.textContent = `Total: $${total}`;
 
@@ -196,3 +202,5 @@ function actualizarCarrito() {
     main.classList.remove("con-carrito-abierto");
   }
 }
+
+

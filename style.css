@@ -243,6 +243,32 @@ main.con-carrito-abierto .productos {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+.btn-flotante-carrito {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff85a2;
+  color: white;
+  border: none;
+  padding: 15px 18px;
+  border-radius: 50%;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1100;
+  transition: background-color 0.3s ease;
+}
+
+.btn-flotante-carrito:hover {
+  background-color: #e46a8d;
+}
+
+/* Solo mostrar si el carrito está cerrado */
+.carrito.visible ~ .btn-flotante-carrito {
+  display: none;
+}
+
+
 /* ------------------ Responsive: Celulares ------------------ */
 @media (max-width: 680px) {
   .carrito {
