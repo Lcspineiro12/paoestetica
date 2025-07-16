@@ -6,9 +6,9 @@
 /* ------------------ Fondo ------------------ */
 body {
   font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 42%, rgb(205, 113, 113) 62%, rgb(179, 106, 106) 100%);
   margin: 0;
   color: #333;
-  background-image: url("paoestetica.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -30,10 +30,8 @@ body::before {
 
 /* ------------------ Encabezado ------------------ */
 header {
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 42%, rgba(230, 188, 188, 1) 62%, rgba(212, 150, 150, 1) 100%);
   text-align: center;
   padding: 20px;
-  box-shadow: 0 2px 5px #ccc;
   position: relative;
   overflow: hidden;
   z-index: 2;
@@ -265,6 +263,59 @@ main.con-carrito-abierto .productos {
 
 /* Solo mostrar si el carrito está cerrado */
 .carrito.visible ~ .btn-flotante-carrito {
+  display: none;
+}
+
+.brand-filter {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.logo-btn {
+  width: 160px;
+  height: auto;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  border: 2px solid #d1225b;
+  padding: 8px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0.7;
+}
+
+.logo-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  background: #ffe6ef;
+  opacity: 1;
+}
+
+.logo-btn.selected {
+  border: 3px solid #a00c3f;
+  box-shadow: 0 0 12px rgba(209, 34, 91, 0.4);
+  opacity: 1;
+}
+
+.producto {
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.producto.oculto {
   display: none;
 }
 

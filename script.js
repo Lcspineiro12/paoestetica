@@ -10,6 +10,36 @@ const main = document.querySelector('main');
 const totalTexto = document.getElementById('total');
 const btnWA = document.getElementById('btn-whatsapp');
 
+// Botones de marca
+const topBtn = document.getElementById('btn-top');
+const otherBtn = document.getElementById('btn-other');
+
+if (topBtn && otherBtn) {
+  topBtn.addEventListener('click', () => {
+    topBtn.classList.add('selected');
+    otherBtn.classList.remove('selected');
+    document.querySelectorAll('.producto').forEach(p => {
+      if (p.dataset.marca === 'top') {
+        p.classList.remove('oculto');
+      } else {
+        p.classList.add('oculto');
+      }
+    });
+  });
+
+  otherBtn.addEventListener('click', () => {
+    otherBtn.classList.add('selected');
+    topBtn.classList.remove('selected');
+    document.querySelectorAll('.producto').forEach(p => {
+      if (p.dataset.marca === 'otra') {
+        p.classList.remove('oculto');
+      } else {
+        p.classList.add('oculto');
+      }
+    });
+  });
+}
+
 // Cargar stock desde JSON
 fetch('stock.json')
   .then(res => res.json())
@@ -60,6 +90,7 @@ function inicializarProductos() {
       stockLabel.classList.add('stock-label');
       prod.appendChild(stockLabel);
     }
+
     const medidaInicial = prod.dataset.medida;
     const productoNombreInicial = `${nombre} - ${medidaInicial}`;
     stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombreInicial] ?? 0}`;
@@ -180,7 +211,6 @@ function actualizarCarrito() {
     carritoUl.appendChild(li);
   });
 
-  // Scroll desde abajo
   carritoUl.scrollTop = carritoUl.scrollHeight;
 
   totalTexto.textContent = `Total: $${total}`;
@@ -202,5 +232,3 @@ function actualizarCarrito() {
     main.classList.remove("con-carrito-abierto");
   }
 }
-
-
