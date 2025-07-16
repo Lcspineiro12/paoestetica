@@ -66,22 +66,6 @@ function inicializarProductos() {
       primera.classList.add('selected');
     }
 
-    botones.forEach(btn => {
-      btn.addEventListener('click', () => {
-        botones.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        prod.dataset.medida = btn.dataset.medida;
-        prod.dataset.precio = btn.dataset.precio;
-        precioElem.textContent = `$${btn.dataset.precio}`;
-
-        const productoNombre = `${nombre} - ${btn.dataset.medida}`;
-        const stockLabel = prod.querySelector('.stock-label');
-        if (stockLabel) {
-          stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre] ?? 0}`;
-        }
-      });
-    });
-
     const btnAgregar = prod.querySelector('.btn-agregar');
 
     let stockLabel = prod.querySelector('.stock-label');
@@ -97,6 +81,29 @@ function inicializarProductos() {
 
     btnAgregar.disabled = (stockDisponible[productoNombreInicial] ?? 0) <= 0;
     btnAgregar.textContent = btnAgregar.disabled ? "NO HAY STOCK" : "Agregar al carrito";
+
+    // ✅ Manejo de selección de medida con control de stock
+    botones.forEach(btn => {
+      btn.addEventListener('click', () => {
+        botones.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        prod.dataset.medida = btn.dataset.medida;
+        prod.dataset.precio = btn.dataset.precio;
+        precioElem.textContent = `$${btn.dataset.precio}`;
+
+        const productoNombre = `${nombre} - ${btn.dataset.medida}`;
+        const stock = stockDisponible[productoNombre] ?? 0;
+
+        if (stockLabel) {
+          stockLabel.textContent = `Stock disponible: ${stock}`;
+        }
+
+        if (btnAgregar) {
+          btnAgregar.disabled = stock <= 0;
+          btnAgregar.textContent = stock <= 0 ? "NO HAY STOCK" : "Agregar al carrito";
+        }
+      });
+    });
 
     btnAgregar.addEventListener('click', () => {
       const medida = prod.dataset.medida;
@@ -125,6 +132,9 @@ function inicializarProductos() {
       }
     });
   });
+
+  // Ocultar todos los productos al iniciar
+  document.querySelectorAll('.producto').forEach(p => p.classList.add('oculto'));
 
   if (btnCerrar) {
     btnCerrar.addEventListener('click', () => {
