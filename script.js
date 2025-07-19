@@ -1,8 +1,9 @@
+// JS COMPLETO ACTUALIZADO CON ANIMACIÓN AL MOSTRAR PRODUCTOS
+
 let carrito = [];
 let total = 0;
 const stockDisponible = {};
 
-// Elementos globales
 const btnAbrirCarrito = document.getElementById('abrir-carrito');
 const btnCerrar = document.getElementById('cerrar-carrito');
 const carritoElemento = document.querySelector('.carrito');
@@ -10,7 +11,6 @@ const main = document.querySelector('main');
 const totalTexto = document.getElementById('total');
 const btnWA = document.getElementById('btn-whatsapp');
 
-// Botones de marca
 const topBtn = document.getElementById('btn-top');
 const otherBtn = document.getElementById('btn-other');
 
@@ -18,29 +18,44 @@ if (topBtn && otherBtn) {
   topBtn.addEventListener('click', () => {
     topBtn.classList.add('selected');
     otherBtn.classList.remove('selected');
+
     document.querySelectorAll('.producto').forEach(p => {
       if (p.dataset.marca === 'top') {
         p.classList.remove('oculto');
+        p.style.animation = 'none';
+        void p.offsetWidth;
+        p.style.animation = 'fadeInUp 0.4s ease';
       } else {
         p.classList.add('oculto');
       }
+    });
+
+    document.querySelectorAll('h3').forEach(h3 => {
+      h3.classList.toggle('oculto', !h3.textContent.includes('Norma Bustos'));
     });
   });
 
   otherBtn.addEventListener('click', () => {
     otherBtn.classList.add('selected');
     topBtn.classList.remove('selected');
+
     document.querySelectorAll('.producto').forEach(p => {
       if (p.dataset.marca === 'otra') {
         p.classList.remove('oculto');
+        p.style.animation = 'none';
+        void p.offsetWidth;
+        p.style.animation = 'fadeInUp 0.4s ease';
       } else {
         p.classList.add('oculto');
       }
     });
+
+    document.querySelectorAll('h3').forEach(h3 => {
+      h3.classList.toggle('oculto', !h3.textContent.includes('Lidherma'));
+    });
   });
 }
 
-// Cargar stock desde JSON
 fetch('stock.json')
   .then(res => res.json())
   .then(data => {
@@ -82,7 +97,6 @@ function inicializarProductos() {
     btnAgregar.disabled = (stockDisponible[productoNombreInicial] ?? 0) <= 0;
     btnAgregar.textContent = btnAgregar.disabled ? "NO HAY STOCK" : "Agregar al carrito";
 
-    // ✅ Manejo de selección de medida con control de stock
     botones.forEach(btn => {
       btn.addEventListener('click', () => {
         botones.forEach(b => b.classList.remove('selected'));
@@ -94,14 +108,9 @@ function inicializarProductos() {
         const productoNombre = `${nombre} - ${btn.dataset.medida}`;
         const stock = stockDisponible[productoNombre] ?? 0;
 
-        if (stockLabel) {
-          stockLabel.textContent = `Stock disponible: ${stock}`;
-        }
-
-        if (btnAgregar) {
-          btnAgregar.disabled = stock <= 0;
-          btnAgregar.textContent = stock <= 0 ? "NO HAY STOCK" : "Agregar al carrito";
-        }
+        stockLabel.textContent = `Stock disponible: ${stock}`;
+        btnAgregar.disabled = stock <= 0;
+        btnAgregar.textContent = stock <= 0 ? "NO HAY STOCK" : "Agregar al carrito";
       });
     });
 
@@ -110,9 +119,7 @@ function inicializarProductos() {
       const precio = parseFloat(prod.dataset.precio);
       const productoNombre = `${nombre} - ${medida}`;
 
-      if (!(productoNombre in stockDisponible)) {
-        stockDisponible[productoNombre] = 0;
-      }
+      if (!(productoNombre in stockDisponible)) stockDisponible[productoNombre] = 0;
 
       if (stockDisponible[productoNombre] <= 0) {
         btnAgregar.disabled = true;
@@ -123,9 +130,7 @@ function inicializarProductos() {
 
       agregarAlCarrito(productoNombre, precio);
       stockDisponible[productoNombre]--;
-
       stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre]}`;
-
       if (stockDisponible[productoNombre] <= 0) {
         btnAgregar.disabled = true;
         btnAgregar.textContent = "NO HAY STOCK";
@@ -133,8 +138,7 @@ function inicializarProductos() {
     });
   });
 
-  // Ocultar todos los productos al iniciar
-  document.querySelectorAll('.producto').forEach(p => p.classList.add('oculto'));
+  document.querySelectorAll('.producto, h3').forEach(el => el.classList.add('oculto'));
 
   if (btnCerrar) {
     btnCerrar.addEventListener('click', () => {
@@ -153,7 +157,6 @@ function inicializarProductos() {
 
 function agregarAlCarrito(producto, precio) {
   const existente = carrito.find(item => item.producto === producto);
-
   if (existente) {
     if (existente.cantidad >= 10) {
       alert("No hay más stock disponible para este producto.");
@@ -169,7 +172,6 @@ function agregarAlCarrito(producto, precio) {
       precioTotal: precio
     });
   }
-
   total = carrito.reduce((acc, item) => acc + item.precioTotal, 0);
   actualizarCarrito();
 }
@@ -177,12 +179,7 @@ function agregarAlCarrito(producto, precio) {
 function quitarDelCarrito(index) {
   const item = carrito[index];
   const nombre = item.producto;
-
-  if (nombre in stockDisponible) {
-    stockDisponible[nombre]++;
-  } else {
-    stockDisponible[nombre] = 1;
-  }
+  stockDisponible[nombre] = (stockDisponible[nombre] ?? 0) + 1;
 
   document.querySelectorAll('.producto').forEach(prod => {
     const nombreProducto = prod.dataset.nombre;
@@ -193,9 +190,7 @@ function quitarDelCarrito(index) {
       const label = prod.querySelector('.stock-label');
       btn.disabled = false;
       btn.textContent = 'Agregar al carrito';
-      if (label) {
-        label.textContent = `Stock disponible: ${stockDisponible[nombre]}`;
-      }
+      if (label) label.textContent = `Stock disponible: ${stockDisponible[nombre]}`;
     }
   });
 
@@ -222,7 +217,6 @@ function actualizarCarrito() {
   });
 
   carritoUl.scrollTop = carritoUl.scrollHeight;
-
   totalTexto.textContent = `Total: $${total}`;
 
   if (carrito.length > 0) {
