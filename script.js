@@ -1,5 +1,3 @@
-// JS COMPLETO ACTUALIZADO CON ANIMACIÓN AL MOSTRAR PRODUCTOS
-
 let carrito = [];
 let total = 0;
 const stockDisponible = {};
