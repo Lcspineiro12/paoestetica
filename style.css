@@ -73,7 +73,7 @@ p {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 4px;
   gap: 20px;
 }
 
@@ -344,6 +344,11 @@ main.con-carrito-abierto .productos {
   display: none;
 }
 
+body.no-scroll {
+  overflow: hidden;
+}
+
+
 /* ------------------ Responsive: Celulares ------------------ */
 @media (max-width: 680px) {
   .carrito {
@@ -393,12 +398,4 @@ main.con-carrito-abierto .productos {
     margin-top: 0;
     transition: margin-bottom 0.3s ease;
   }
-}
-
-/* ------------------ Etiqueta de stock ------------------ */
-.stock-label {
-  font-size: 14px;
-  color: #555;
-  margin-top: 8px;
-  font-weight: 500;
 }

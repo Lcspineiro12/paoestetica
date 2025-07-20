@@ -1,6 +1,5 @@
 let carrito = [];
 let total = 0;
-const stockDisponible = {};
 
 const btnAbrirCarrito = document.getElementById('abrir-carrito');
 const btnCerrar = document.getElementById('cerrar-carrito');
@@ -18,13 +17,11 @@ if (topBtn && otherBtn) {
     otherBtn.classList.remove('selected');
 
     document.querySelectorAll('.producto').forEach(p => {
+      p.classList.toggle('oculto', p.dataset.marca !== 'top');
       if (p.dataset.marca === 'top') {
-        p.classList.remove('oculto');
         p.style.animation = 'none';
         void p.offsetWidth;
         p.style.animation = 'fadeInUp 0.4s ease';
-      } else {
-        p.classList.add('oculto');
       }
     });
 
@@ -38,13 +35,11 @@ if (topBtn && otherBtn) {
     topBtn.classList.remove('selected');
 
     document.querySelectorAll('.producto').forEach(p => {
+      p.classList.toggle('oculto', p.dataset.marca !== 'otra');
       if (p.dataset.marca === 'otra') {
-        p.classList.remove('oculto');
         p.style.animation = 'none';
         void p.offsetWidth;
         p.style.animation = 'fadeInUp 0.4s ease';
-      } else {
-        p.classList.add('oculto');
       }
     });
 
@@ -54,112 +49,63 @@ if (topBtn && otherBtn) {
   });
 }
 
-fetch('stock.json')
-  .then(res => res.json())
-  .then(data => {
-    Object.assign(stockDisponible, data);
-    inicializarProductos();
-  })
-  .catch(err => {
-    console.error("Error al cargar el stock:", err);
-    inicializarProductos();
-  });
+document.body.classList.add('no-scroll');
+window.addEventListener('load', () => {
+  document.body.classList.remove('no-scroll');
+});
 
-function inicializarProductos() {
-  document.querySelectorAll('.producto').forEach(prod => {
-    const nombre = prod.dataset.nombre;
-    const precioElem = prod.querySelector('.precio');
-    const botones = prod.querySelectorAll('.medida-btn');
+document.querySelectorAll('.producto').forEach(prod => {
+  const nombre = prod.dataset.nombre;
+  const precioElem = prod.querySelector('.precio');
+  const botones = prod.querySelectorAll('.medida-btn');
 
-    if (botones.length > 0) {
-      const primera = botones[0];
-      prod.dataset.medida = primera.dataset.medida;
-      prod.dataset.precio = primera.dataset.precio;
-      precioElem.textContent = `$${primera.dataset.precio}`;
-      primera.classList.add('selected');
-    }
+  if (botones.length > 0) {
+    const primera = botones[0];
+    prod.dataset.medida = primera.dataset.medida;
+    prod.dataset.precio = primera.dataset.precio;
+    precioElem.textContent = `$${primera.dataset.precio}`;
+    primera.classList.add('selected');
+  }
 
-    const btnAgregar = prod.querySelector('.btn-agregar');
+  const btnAgregar = prod.querySelector('.btn-agregar');
 
-    let stockLabel = prod.querySelector('.stock-label');
-    if (!stockLabel) {
-      stockLabel = document.createElement('p');
-      stockLabel.classList.add('stock-label');
-      prod.appendChild(stockLabel);
-    }
-
-    const medidaInicial = prod.dataset.medida;
-    const productoNombreInicial = `${nombre} - ${medidaInicial}`;
-    stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombreInicial] ?? 0}`;
-
-    btnAgregar.disabled = (stockDisponible[productoNombreInicial] ?? 0) <= 0;
-    btnAgregar.textContent = btnAgregar.disabled ? "NO HAY STOCK" : "Agregar al carrito";
-
-    botones.forEach(btn => {
-      btn.addEventListener('click', () => {
-        botones.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        prod.dataset.medida = btn.dataset.medida;
-        prod.dataset.precio = btn.dataset.precio;
-        precioElem.textContent = `$${btn.dataset.precio}`;
-
-        const productoNombre = `${nombre} - ${btn.dataset.medida}`;
-        const stock = stockDisponible[productoNombre] ?? 0;
-
-        stockLabel.textContent = `Stock disponible: ${stock}`;
-        btnAgregar.disabled = stock <= 0;
-        btnAgregar.textContent = stock <= 0 ? "NO HAY STOCK" : "Agregar al carrito";
-      });
-    });
-
-    btnAgregar.addEventListener('click', () => {
-      const medida = prod.dataset.medida;
-      const precio = parseFloat(prod.dataset.precio);
-      const productoNombre = `${nombre} - ${medida}`;
-
-      if (!(productoNombre in stockDisponible)) stockDisponible[productoNombre] = 0;
-
-      if (stockDisponible[productoNombre] <= 0) {
-        btnAgregar.disabled = true;
-        btnAgregar.textContent = "NO HAY STOCK";
-        stockLabel.textContent = `Stock disponible: 0`;
-        return;
-      }
-
-      agregarAlCarrito(productoNombre, precio);
-      stockDisponible[productoNombre]--;
-      stockLabel.textContent = `Stock disponible: ${stockDisponible[productoNombre]}`;
-      if (stockDisponible[productoNombre] <= 0) {
-        btnAgregar.disabled = true;
-        btnAgregar.textContent = "NO HAY STOCK";
-      }
+  botones.forEach(btn => {
+    btn.addEventListener('click', () => {
+      botones.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      prod.dataset.medida = btn.dataset.medida;
+      prod.dataset.precio = btn.dataset.precio;
+      precioElem.textContent = `$${btn.dataset.precio}`;
     });
   });
 
-  document.querySelectorAll('.producto, h3').forEach(el => el.classList.add('oculto'));
+  btnAgregar.addEventListener('click', () => {
+    const medida = prod.dataset.medida;
+    const precio = parseFloat(prod.dataset.precio);
+    const productoNombre = `${nombre} - ${medida}`;
+    agregarAlCarrito(productoNombre, precio);
+  });
+});
 
-  if (btnCerrar) {
-    btnCerrar.addEventListener('click', () => {
-      carritoElemento.classList.remove("visible");
-      main.classList.remove("con-carrito-abierto");
-    });
-  }
+document.querySelectorAll('.producto, h3').forEach(el => el.classList.add('oculto'));
 
-  if (btnAbrirCarrito) {
-    btnAbrirCarrito.addEventListener('click', () => {
-      carritoElemento.classList.add("visible");
-      main.classList.add("con-carrito-abierto");
-    });
-  }
+if (btnCerrar) {
+  btnCerrar.addEventListener('click', () => {
+    carritoElemento.classList.remove("visible");
+    main.classList.remove("con-carrito-abierto");
+  });
+}
+
+if (btnAbrirCarrito) {
+  btnAbrirCarrito.addEventListener('click', () => {
+    carritoElemento.classList.add("visible");
+    main.classList.add("con-carrito-abierto");
+  });
 }
 
 function agregarAlCarrito(producto, precio) {
   const existente = carrito.find(item => item.producto === producto);
   if (existente) {
-    if (existente.cantidad >= 10) {
-      alert("No hay más stock disponible para este producto.");
-      return;
-    }
     existente.cantidad++;
     existente.precioTotal = existente.cantidad * existente.precioUnitario;
   } else {
@@ -170,30 +116,14 @@ function agregarAlCarrito(producto, precio) {
       precioTotal: precio
     });
   }
+
   total = carrito.reduce((acc, item) => acc + item.precioTotal, 0);
   actualizarCarrito();
 }
 
 function quitarDelCarrito(index) {
-  const item = carrito[index];
-  const nombre = item.producto;
-  stockDisponible[nombre] = (stockDisponible[nombre] ?? 0) + 1;
-
-  document.querySelectorAll('.producto').forEach(prod => {
-    const nombreProducto = prod.dataset.nombre;
-    const medida = prod.dataset.medida;
-    const productoNombre = `${nombreProducto} - ${medida}`;
-    if (productoNombre === nombre) {
-      const btn = prod.querySelector('.btn-agregar');
-      const label = prod.querySelector('.stock-label');
-      btn.disabled = false;
-      btn.textContent = 'Agregar al carrito';
-      if (label) label.textContent = `Stock disponible: ${stockDisponible[nombre]}`;
-    }
-  });
-
-  total -= item.precioTotal;
   carrito.splice(index, 1);
+  total = carrito.reduce((acc, item) => acc + item.precioTotal, 0);
   actualizarCarrito();
 }
 
@@ -234,3 +164,7 @@ function actualizarCarrito() {
     main.classList.remove("con-carrito-abierto");
   }
 }
+
+window.addEventListener('load', () => {
+  document.body.classList.remove('no-scroll');
+});
