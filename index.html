@@ -14,6 +14,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
             integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            integrity="sha512-Tx3kQZf70dAfqZ7wA4+y2f9kKItVIsxgOnvFkAhdjJw0tghTLu3xLZRVmXHjNIm9vjKicDN7qKugVDj5/SB2Hw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
         <div class="social-container">
             <a href="https://wa.me/5491130629201" target="_blank" class="social-icon whatsapp">
                 <i class="fab fa-whatsapp"></i>
@@ -24,7 +27,6 @@
         </div>
 
         <!-- Font Awesome CDN para los íconos -->
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
         <h2>¡Armá tu carrito y envia todo en un mensaje de WhatsApp!</h2>
     </header>
 
@@ -2504,8 +2506,34 @@
 
 
     <script src="script.js"></script>
-    <script src="https://kit.fontawesome.com/tu_codigo_kit.js" crossorigin="anonymous"></script>
-    <button id="btn-subir" title="Subir arriba"><i class="fas fa-arrow-up"></i></button>
+    <!-- Botón para subir arriba -->
+    <button id="btn-subir" title="Subir arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Font Awesome desde CDN confiable -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-MWmh8XFU+aP9EQCeOeqkMEaqDQk1s4AGoWxzQFexhyAfsoDX9QWY4Y5XuOIEVpx8ZcWtr2DgmFVn3YlG5yXkWg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Script botón subir -->
+    <script>
+        const btnSubir = document.getElementById('btn-subir');
+
+        btnSubir.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                btnSubir.style.display = 'block';
+            } else {
+                btnSubir.style.display = 'none';
+            }
+        });
+    </script>
+
+
 
 </body>
 
