@@ -348,6 +348,29 @@ body.no-scroll {
   overflow: hidden;
 }
 
+#btn-subir {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #d1225b;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  display: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#btn-subir:hover {
+  background-color: #a00c3f;
+  transform: scale(1.1);
+}
+
+
 
 /* ------------------ Responsive: Celulares ------------------ */
 @media (max-width: 680px) {

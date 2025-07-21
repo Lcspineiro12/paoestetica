@@ -168,3 +168,17 @@ function actualizarCarrito() {
 window.addEventListener('load', () => {
   document.body.classList.remove('no-scroll');
 });
+
+const btnSubir = document.createElement('button');
+btnSubir.id = 'btn-subir';
+btnSubir.title = 'Subir arriba';
+btnSubir.innerHTML = '<i class="fas fa-arrow-up"></i>';
+document.body.appendChild(btnSubir);
+
+btnSubir.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+window.addEventListener('scroll', () => {
+  btnSubir.style.display = window.scrollY > 400 ? 'block' : 'none';
+});
